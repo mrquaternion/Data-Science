@@ -1,7 +1,0 @@
-name: ift6758-conda-env
-dependencies:
-  - numpy
-  - pandas
-  - scipy
-  - jupyterlab
-  - geopy
