@@ -6,7 +6,7 @@ from q2 import download_audio, cut_audio
 from typing import List
 
 
-def filter_df(csv_path: str, label: str) -> List[str]:
+def filter_df(csv_path: str, label: str) -> pd.DataFrame:
     """
     Write a function that takes the path to the processed csv from q1 (in the notebook) and returns a df of only the rows 
     that contain the human readable label passed as argument
@@ -39,8 +39,9 @@ def data_pipeline(csv_path: str, label: str) -> None:
 
     filtered_df = filter_df(csv_path, label)
     
-    raw_dir = "./" + label + "_raw/"
-    cut_dir = "./" + label + "_cut/"
+    os.makedirs("./audio/", exist_ok=True)
+    raw_dir = "./audio/" + label + "_raw/"
+    cut_dir = "./audio/" + label + "_cut/"
     os.makedirs(raw_dir, exist_ok=True)
     os.makedirs(cut_dir, exist_ok=True)
 
