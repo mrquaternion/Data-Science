@@ -20,6 +20,9 @@ def download_audio(YTID: str, path: str) -> None:
       path: The path to the file where the audio will be saved
     """
 
+    if exists(path):
+       return
+
     URLS = ["https://www.youtube.com/watch?v=" + YTID]
 
     # These options are necessary since quality of audio is important during analysis
@@ -31,19 +34,16 @@ def download_audio(YTID: str, path: str) -> None:
           'preferredcodec': 'mp3',
           'preferredquality': '192',
       }],
-      'cookiefile': 'cookies.txt', # Chrome EditThisCookie extension in NETSCAPE format
-      'extractor_args': {
-        'youtube': {
-            'player-client': 'web,default',
-            'po_token': 'web+MnQa8aNfyTb0OhrJXIyLQfnkjJuus7C81-hnz8NqKGlvEJiiJmku2bK-taLvAhFgxC4dkZrtII3n6-guUJQgWojluPkI0VXh8Grp-rhpKVkcfkp2VRlcWMVsE-u4sayBdIFLE5kbaVq_DpUiItTua6DjiEMmIA==' # videoplayback pot parameter from an embbed video
-        }
-      }
+      #'cookiefile': 'cookies.txt', # Chrome EditThisCookie extension in NETSCAPE format
+      #'extractor_args': {
+      #  'youtube': {
+      #      'player-client': 'web,default',
+      #      'po_token': 'web+MnQa8aNfyTb0OhrJXIyLQfnkjJuus7C81-hnz8NqKGlvEJiiJmku2bK-taLvAhFgxC4dkZrtII3n6-guUJQgWojluPkI0VXh8Grp-rhpKVkcfkp2VRlcWMVsE-u4sayBdIFLE5kbaVq_DpUiItTua6DjiEMmIA==' # videoplayback pot parameter from an embbed video
+      #  }
+      #}
     }
 
     try:
-      if exists(path + ".mp3"):
-         raise Exception("The audio file already exists.")
-
       with yt_dlp.YoutubeDL(options) as ydl:
         ydl.download(URLS)
     except Exception as e:
@@ -62,9 +62,9 @@ def cut_audio(in_path: str, out_path: str, start: float, end: float) -> None:
       end: Indicates the end of the sequence (in seconds)
     """
 
-    input_audio = ffmpeg.input(in_path + ".mp3")
+    input_audio = ffmpeg.input(in_path)
     filtered_audio = input_audio.filter('atrim', start=start, end=end)
-    output_stream = ffmpeg.output(filtered_audio, out_path + ".mp3")
+    output_stream = ffmpeg.output(filtered_audio, out_path)
 
     output_stream.run()
 

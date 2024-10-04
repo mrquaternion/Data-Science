@@ -15,9 +15,9 @@ def filter_df(csv_path: str, label: str) -> pd.DataFrame:
     get_ids("audio_segments_clean.csv", "Speech")
     """
 
-    labels = pd.read_csv(csv_path)
+    df_labels = pd.read_csv(csv_path)
 
-    filtered_df = labels[labels["label_names"].str.contains(label)]
+    filtered_df = df_labels[df_labels['label_names'].apply(lambda x: label in x.split("|"))]
     
     return filtered_df
     
@@ -47,16 +47,16 @@ def data_pipeline(csv_path: str, label: str) -> None:
 
     for _, row in tqdm(filtered_df.iterrows()):
         id = row["# YTID"]
-        in_path = raw_dir + id
-        out_path = cut_dir + id
         start = row[" start_seconds"]
         end = row[" end_seconds"]
 
+        in_path = raw_dir + id 
+        out_path = cut_dir + id 
+
         try:
-            download_audio(id, in_path)
-            
+            #download_audio(id, in_path)
             if os.path.exists(in_path + ".mp3"):
-                cut_audio(in_path, out_path, start, end)
+                cut_audio(in_path + ".mp3", out_path + ".mp3", start, end)
         except Exception:
             continue
 
