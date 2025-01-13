@@ -94,7 +94,7 @@ def tests(wd: pd.DataFrame, we: pd.DataFrame, verbose: bool = False) -> Tuple[fl
 
     # TODO: Obtenez la valeur-p pour le test de normalité sur les données en semaine et fin de semaine séparément
     # C'est à dire est-ce que les 2 distributions sont normales
-    p_wd_normal = sp.normaltest(wd).pvalue # Test Shapiro-Wilk avec hypothèse nulle que les données sont tirées d'une distribution normale
+    p_wd_normal = sp.normaltest(wd).pvalue # Test normal avec hypothèse nulle que les données sont tirées d'une distribution normale
     p_we_normal = sp.normaltest(we).pvalue
 
     # TODO: Obtenez la valeur-p pour le test qui vérifie si ces 2 distributions ont la même variance
@@ -190,7 +190,7 @@ def main():
     # fix 1: best transformed tests
     trans = df.copy()
 
-    trans['comment_count'] = np.log(df.comment_count)  # TODO: apply some transformation to the data # DONE
+    trans['comment_count'] = np.sqrt(df.comment_count)  # TODO: apply some transformation to the data # DONE
 
     T_wd, T_we = split_data(trans)
     p_T_ttest, p_T_wd_normal, p_T_we_normal, p_T_vartest = tests(T_wd, T_we)
